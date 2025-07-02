@@ -14,58 +14,51 @@ export interface TableItem {
 interface TableRowProps {
   item: TableItem;
 }
-
 function TableRow({ item }: TableRowProps): JSX.Element {
   const getTypeClasses = (type: TableItem['type']): string => {
     return type === 'project'
-      ? 'bg-purple-600 text-purple-100'
-      : 'bg-orange-600 text-orange-100';
+      ? 'bg-indigo-100 text-indigo-800'
+      : 'bg-red-100 text-red-800';
   };
 
   const getStatusClasses = (status: TableItem['status']): string => {
     switch (status.toLowerCase()) {
       case 'active':
-        return 'bg-green-600 text-green-100';
+        return 'bg-green-100 text-green-800';
       case 'pending':
-        return 'bg-yellow-600 text-yellow-100';
+        return 'bg-yellow-100 text-yellow-800';
       default:
-        return 'bg-gray-500 text-gray-100';
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   return (
-    <tr className="hover:bg-gray-700">
+    <tr className="hover:bg-gray-50 transition">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex flex-col">
-          <p className="text-sm font-medium text-white">{item.name}</p>
-          <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
+          <p className="text-sm font-semibold text-gray-900">{item.name}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeClasses(item.type)}`}>
+        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getTypeClasses(item.type)}`}>
           {item.type}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-        {item.allocatedBtc}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-        €{item.eurValue}
-      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{item.allocatedBtc}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">€{item.eurValue}</td>
       <td className="px-6 py-4 whitespace-nowrap text-sm">
-        <span className="text-white">{item.signatures.split('/')[0]}</span>
-        <span className="text-gray-400">/{item.signatures.split('/')[1]}</span>
+        <span className="text-gray-900 font-medium">{item.signatures.split('/')[0]}</span>
+        <span className="text-gray-500">/{item.signatures.split('/')[1]}</span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClasses(item.status)}`}>
+        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusClasses(item.status)}`}>
           {item.status}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-        {item.lastUpdated}
-      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.lastUpdated}</td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <button className="text-gray-400 hover:text-gray-200">
+        <button className="text-gray-400 hover:text-gray-600 transition">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 8a2 2 110-4 2 2 0 010 4zm0 8a2 2 110-4 2 2 0 010 4z" />
           </svg>
@@ -76,3 +69,4 @@ function TableRow({ item }: TableRowProps): JSX.Element {
 }
 
 export default TableRow;
+
