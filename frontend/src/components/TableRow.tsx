@@ -15,12 +15,6 @@ interface TableRowProps {
   item: TableItem;
 }
 function TableRow({ item }: TableRowProps): JSX.Element {
-  const getTypeClasses = (type: TableItem['type']): string => {
-    return type === 'project'
-      ? 'bg-indigo-100 text-indigo-800'
-      : 'bg-red-100 text-red-800';
-  };
-
   const getStatusClasses = (status: TableItem['status']): string => {
     switch (status.toLowerCase()) {
       case 'active':
@@ -41,7 +35,7 @@ function TableRow({ item }: TableRowProps): JSX.Element {
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getTypeClasses(item.type)}`}>
+        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold text-gray-700`}>
           {item.type}
         </span>
       </td>
