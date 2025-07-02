@@ -1,3 +1,4 @@
+
 import BitcoinSummaryCard from './components/BitcoinSummaryCard';
 import ProjectsExpensesTable from './components/ProjectsExpensesTable';
 
@@ -70,10 +71,10 @@ function App() {
     <div className="min-h-screen p-8 font-sans">
       <header className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-brand-primary">Bitcoin Treasury</h1> {/* Updated from text-white */}
+          <h1 className="text-2xl font-bold text-primary">Bitcoin Treasury</h1> {/* Updated from text-white */}
           <p className="text-sm text-text-muted">Company Bitcoin Management Dashboard</p> {/* Updated from text-gray-400 */}
         </div>
-        <button className="bg-brand-primary hover:bg-brand-primary-hover text-text-heading font-semibold py-2 px-4 rounded-md flex items-center space-x-2"> {/* Updated bg- and text- classes */}
+        <button className="bg-primary hover:bg-secondary text-text-heading font-semibold py-2 px-4 rounded-md flex items-center space-x-2"> {/* Updated bg- and text- classes */}
           <span className="text-xl leading-none">+</span>
           <span>New Allocation</span>
         </button>

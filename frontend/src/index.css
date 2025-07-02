@@ -1,22 +1,25 @@
-
 @import "tailwindcss";
 
 @theme {
-  --color-background-default: #0a0a0a;
-  --color-background-card: #141414;
-  --color-background-subtle: #1f1f1f;
+  /* Background Colors */
+  --color-background-default: #121212; /* Dark, near black */
+  --color-background-card: #1e1e1e;    /* Slightly lighter dark */
 
-  --color-text-default: #eaeaea;
-  --color-text-heading: #ffffff;
-  --color-text-muted: #808080;
+  /* Text Colors */
+  --color-text-default: #f9f6f0;      /* Off-white for contrast */
+  --color-text-subtle: #b0a68f;        /* Muted gold/beige */
 
-  --color-brand-primary: #ff9900;       /* Orange BTC glow */
-  --color-brand-primary-hover: #cc7a00;
-  --color-brand-primary-focus: #ffb84d;
-  --color-brand-secondary: #00bcd4;     /* Cyan contrast */
+  /* Primary, Secondary, Tertiary UI Accents */
+  --color-primary: #f7931a;          /* Bitcoin orange */
+  --color-secondary: #f2a900;        /* Golden yellow */
+  --color-tertiary: #5a5a5a;         /* Dark gray/charcoal */
 
-  --color-status-success-default: #10b981;
-  --color-status-success-text: #6ee7b7;
-  --color-status-warning-default: #f59e0b;
-  --color-status-info-default: #3b82f6;
+  /* Semantic Status Colors */
+  --color-status-success: #32cd32;   /* Bright green */
+  --color-status-warning: #f2a900;   /* Golden yellow for warnings */
+  --color-status-info: #9ec9e2;      /* Soft blue for info */
+  --color-status-danger: #ef4444;    /* Red for danger */
+
+  /* Border Colors */
+  --color-border-subtle: #3a3a3a;     /* Dark gray */
 }

@@ -22,24 +22,29 @@ function ProjectsExpensesTable({ data }: ProjectsExpensesTableProps): JSX.Elemen
     <div>
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-1">
+          {/* Header text color */}
+          <h2 className="text-2xl font-semibold text-primary mb-1">
             Projects & Expenses
           </h2>
-          <p className="text-sm text-gray-500">
+          {/* Subtitle text color */}
+          <p className="text-sm text-text-subtle">
             Bitcoin allocations across all projects and operational expenses - Requires 3 of 5 signatures for activation
           </p>
         </div>
         <div className="flex space-x-3 mt-4 md:mt-0">
           <div className="relative">
+            {/* Search input field styling */}
             <input
               type="text"
               placeholder="Search projects..."
-              className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition"
+              // Background, border, text, and placeholder colors from theme
+              className="pl-10 pr-4 py-2 rounded-lg border border-border-subtle bg-background-default text-text-default placeholder-text-subtle focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
               value={searchTerm}
               onChange={handleSearchChange}
             />
+            {/* Search icon color */}
             <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-subtle"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -51,9 +56,12 @@ function ProjectsExpensesTable({ data }: ProjectsExpensesTableProps): JSX.Elemen
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      {/* Table container styling */}
+      <div className="overflow-x-auto rounded-lg border border-border-subtle shadow-sm">
+        {/* Table itself, with themed dividers */}
+        <table className="min-w-full divide-y divide-border-subtle">
+          {/* Table header background and text */}
+          <thead className="bg-background-default"> {/* Use default background for table head as it's typically slightly darker than the body in dark themes */}
             <tr>
               {[
                 'Name', 'Type', 'Allocated Bitcoin', 'EUR Value', 'Signatures', 'Status', 'Last Updated', 'Actions',
@@ -61,14 +69,16 @@ function ProjectsExpensesTable({ data }: ProjectsExpensesTableProps): JSX.Elemen
                 <th
                   key={header}
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide"
+                  // Header text color
+                  className="px-6 py-3 text-left text-xs font-semibold text-text-subtle uppercase tracking-wide"
                 >
                   {header}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          {/* Table body background and dividers */}
+          <tbody className="bg-background-card divide-y divide-border-subtle"> {/* Use card background for table body */}
             {filteredData.map((item: TableItem, index: number) => (
               <TableRow key={index} item={item} />
             ))}
@@ -78,8 +88,5 @@ function ProjectsExpensesTable({ data }: ProjectsExpensesTableProps): JSX.Elemen
     </div>
   );
 }
-
-
-
 
 export default ProjectsExpensesTable;
