@@ -23,6 +23,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/", s.HelloWorldHandler)
 
 	e.GET("/health", s.healthHandler)
+	e.GET("/balance", s.GetBalanceHandler)
 
 	return e
 }
