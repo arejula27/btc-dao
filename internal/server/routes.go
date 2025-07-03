@@ -35,6 +35,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	return e
 }
 
+// HelloWorldHandler is a simple handler that returns a "Hello World" message.
 func (s *Server) HelloWorldHandler(c echo.Context) error {
 	resp := map[string]string{
 		"message": "Hello World",
@@ -43,6 +44,7 @@ func (s *Server) HelloWorldHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 
+// healthHandler checks the health of the database connection.
 func (s *Server) healthHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, s.db.Health())
 }
