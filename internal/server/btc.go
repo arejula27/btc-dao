@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
@@ -63,28 +62,17 @@ func (bcli *bitcoinClient) callRPC(method string, params []interface{}) ([]byte,
 	return rpcResp.Result, nil
 }
 
-// TODO: Should i move the btc client logic to a separate package?
-// maybe the server should call bcli.GetBalance(descripror) instead of managing btc logic
-
-// GetBalanceHandler handles the request to get the balance of a Bitcoin wallet.
-// It will obtain the user from the context, gather his descriptor from the database
-func (s *Server) GetBalanceHandler(c echo.Context) error {
-
-	// Gather from database
-	descriptor := "tr([05ebc07a/86h/1h/0h]tpubDCCqg9reqruTFN8nhdZU7CyCJL17EGKWEjiyUrKWauothvMN4Rr1FFsnLG5ocaQQyD63ZnUfnfCLGWChYhd1QqgLVpo6PBNwejXRcSmyt2Y/<0;1>/*)#6v7wxu2x"
-
+func (bcli *bitcoinClient) GetBalance(descriptor string) (float64, error) {
 	// Call Bitcoin RPC to get balance
-	result, err := s.bcli.callRPC("scantxoutset", []any{"start", []interface{}{map[string]interface{}{"desc": descriptor, "range": []int{0, 1000}}}})
+	result, err := bcli.callRPC("scantxoutset", []interface{}{"start", []interface{}{map[string]interface{}{"desc": descriptor, "range": []int{0, 1000}}}})
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return 0, err
 	}
+
 	var balanceInfo map[string]any
 	if err := json.Unmarshal(result, &balanceInfo); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to parse balance info"})
+		return 0, fmt.Errorf("failed to parse balance info: %w", err)
 	}
 
-	// return the balance
-	return c.JSON(http.StatusOK, map[string]float64{
-		"balance": balanceInfo["total_amount"].(float64),
-	})
+	return balanceInfo["total_amount"].(float64), nil
 }
