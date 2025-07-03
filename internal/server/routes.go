@@ -24,7 +24,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/", s.HelloWorldHandler)
 
 	e.GET("/health", s.healthHandler)
-	e.GET("/balance", s.GetBalanceHandler)
+
+	//BITCOIN ROUTES
+	// this routes works as a btc node proxy
+	//create group for Bitcoin related routes
+	btcGroup := e.Group("/btc")
+	// Register the Bitcoin balance handler
+	btcGroup.GET("/getBalance", s.GetBalanceHandler)
 
 	return e
 }

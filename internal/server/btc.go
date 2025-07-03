@@ -62,6 +62,7 @@ func (bcli *bitcoinClient) callRPC(method string, params []interface{}) ([]byte,
 	return rpcResp.Result, nil
 }
 
+// GetBalance retrieves the balance of a Bitcoin wallet using the provided descriptor.
 func (bcli *bitcoinClient) GetBalance(descriptor string) (float64, error) {
 	// Call Bitcoin RPC to get balance
 	result, err := bcli.callRPC("scantxoutset", []interface{}{"start", []interface{}{map[string]interface{}{"desc": descriptor, "range": []int{0, 1000}}}})
