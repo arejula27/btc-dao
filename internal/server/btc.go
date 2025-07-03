@@ -8,6 +8,12 @@ import (
 	"net/http"
 )
 
+type bitcoinClient struct {
+	Username string // Username for RPC authentication
+	Password string // Password for RPC authentication
+	URL      string // URL of the Bitcoin RPC server
+}
+
 type RPCRequest struct {
 	Jsonrpc string        `json:"jsonrpc"`
 	ID      string        `json:"id"`
@@ -21,10 +27,7 @@ type RPCResponse struct {
 	ID     string          `json:"id"`
 }
 
-func callRPC(method string, params []interface{}) ([]byte, error) {
-	rpcUser := "admin1"
-	rpcPassword := "123"
-	url := "http://127.0.0.1:18443"
+func (bcli *bitcoinClient) callRPC(method string, params []interface{}) ([]byte, error) {
 
 	reqBody := RPCRequest{
 		Jsonrpc: "1.0",
@@ -34,12 +37,12 @@ func callRPC(method string, params []interface{}) ([]byte, error) {
 	}
 
 	reqBytes, _ := json.Marshal(reqBody)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", bcli.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return nil, err
 	}
 
-	req.SetBasicAuth(rpcUser, rpcPassword)
+	req.SetBasicAuth(bcli.Username, bcli.Password)
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
@@ -63,7 +66,7 @@ func (s *Server) GetBalanceHandler(c echo.Context) error {
 
 	// Gather from database
 	descriptor := "tr([05ebc07a/86h/1h/0h]tpubDCCqg9reqruTFN8nhdZU7CyCJL17EGKWEjiyUrKWauothvMN4Rr1FFsnLG5ocaQQyD63ZnUfnfCLGWChYhd1QqgLVpo6PBNwejXRcSmyt2Y/<0;1>/*)#6v7wxu2x"
-	result, err := callRPC("scantxoutset", []interface{}{"start", []interface{}{map[string]interface{}{"desc": descriptor, "range": []int{0, 1000}}}})
+	result, err := s.bcli.callRPC("scantxoutset", []interface{}{"start", []interface{}{map[string]interface{}{"desc": descriptor, "range": []int{0, 1000}}}})
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

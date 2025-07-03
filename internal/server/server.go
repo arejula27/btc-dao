@@ -15,7 +15,8 @@ import (
 type Server struct {
 	port int
 
-	db database.Service
+	db   database.Service
+	bcli *bitcoinClient
 }
 
 func NewServer() *http.Server {
@@ -24,6 +25,11 @@ func NewServer() *http.Server {
 		port: port,
 
 		db: database.New(),
+		bcli: &bitcoinClient{
+			Username: os.Getenv("BTC_RPC_USER"),
+			Password: os.Getenv("BTC_RPC_PASSWORD"),
+			URL:      os.Getenv("BTC_RPC_URL"),
+		},
 	}
 
 	// Declare Server config
