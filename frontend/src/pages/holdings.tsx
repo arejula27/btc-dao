@@ -92,29 +92,36 @@ const Dashboard = () => {
   const totalKeys = keyStatuses.length;
 
   return (
-    <div className="min-h-screen  p-8 font-sans max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto p-8 font-sans">
       {/* Header */}
-      <header className="flex items-center gap-3  pb-4 mb-8">
-        <Link to="/" className="text-text-subtle hover:text-primary transition">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          <span className="sr-only">Go back</span>
-        </Link>
-
-        <div className="flex items-center justify-center w-10 h-10 rounded-md bg-orange-100 text-orange-600 font-bold text-xl">₿</div>
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">Bitcoin Treasury</h1>
-          <p className="text-sm text-gray-500">Key Ownership &amp; UTXO Management</p>
+      <header className="flex justify-between items-center mb-8">
+        <div className="flex items-center gap-3">
+          <Link to="/" className="text-text-subtle hover:text-primary transition">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="sr-only">Go back</span>
+          </Link>
+          <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-md flex items-center justify-center text-lg font-bold">
+            ₿
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Bitcoin Treasury</h1>
+            <p className="text-sm text-gray-500">Company Bitcoin Management Dashboard</p>
+          </div>
         </div>
+        <button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 font-bold">
+          Verify your Key
+        </button>
       </header>
+
       {/* Summary cards */}
       <section className="grid grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow border border-gray-200 flex flex-col justify-between">

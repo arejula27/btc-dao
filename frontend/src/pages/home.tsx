@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 import BitcoinSummaryCard from '../components/BitcoinSummaryCard';
 
 const summaryCards = [
@@ -94,7 +93,7 @@ const AllocationDashboard = () => {
             <p className="text-sm text-gray-500">Company Bitcoin Management Dashboard</p>
           </div>
         </div>
-        <button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800">
+        <button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 font-bold">
           + New Allocation
         </button>
       </header>
