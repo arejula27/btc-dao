@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 interface KeyStatus {
   name: string;
   role: string;
-  status: 'verified' | 'expired' | 'warning';
+  status: 'verified' | 'lost' | 'warning';
   daysAgo: number;
 }
 
@@ -18,11 +18,11 @@ interface UTXO {
 }
 
 const keyStatuses: KeyStatus[] = [
-  { name: 'alice_ceo', role: 'CEO', status: 'verified', daysAgo: 536 },
-  { name: 'bob_cfo', role: 'CFO', status: 'verified', daysAgo: 537 },
-  { name: 'charlie_cto', role: 'CTO', status: 'warning', daysAgo: 540 },
-  { name: 'diana_coo', role: 'COO', status: 'verified', daysAgo: 538 },
-  { name: 'eve_board', role: 'Board Member', status: 'expired', daysAgo: 542 },
+  { name: 'alice_ceo', role: 'CEO', status: 'verified', daysAgo: 5 },
+  { name: 'bob_cfo', role: 'CFO', status: 'verified', daysAgo: 7 },
+  { name: 'charlie_cto', role: 'CTO', status: 'warning', daysAgo: 40 },
+  { name: 'diana_coo', role: 'COO', status: 'verified', daysAgo: 12 },
+  { name: 'eve_board', role: 'Board Member', status: 'lost', daysAgo: 542 },
 ];
 
 const utxos: UTXO[] = [
@@ -80,7 +80,7 @@ const utxos: UTXO[] = [
 
 const statusColors = {
   verified: 'bg-green-100 text-green-800',
-  expired: 'bg-red-100 text-red-800',
+  lost: 'bg-red-100 text-red-800',
   warning: 'bg-yellow-100 text-yellow-800',
 };
 
@@ -93,15 +93,8 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 font-sans max-w-7xl mx-auto">
-      {/* Header 
+      {/* Header */}
       <header className="flex items-center gap-3 border-b border-gray-200 pb-4 mb-8">
-        <div className="flex items-center justify-center w-10 h-10 rounded-md bg-orange-100 text-orange-600 font-bold text-xl">₿</div>
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">Bitcoin Treasury</h1>
-          <p className="text-sm text-gray-500">Key Ownership &amp; UTXO Management</p>
-        </div>
-      </header>*/}
-      <header className="flex items-center gap-4 mb-8">
         <Link to="/" className="text-text-subtle hover:text-primary transition">
           <svg
             className="w-6 h-6"
@@ -115,20 +108,21 @@ const Dashboard = () => {
           </svg>
           <span className="sr-only">Go back</span>
         </Link>
+
+        <div className="flex items-center justify-center w-10 h-10 rounded-md bg-orange-100 text-orange-600 font-bold text-xl">₿</div>
         <div>
-          <h1 className="text-3xl font-bold text-primary">Bitcoin Treasury</h1>
-          <p className="text-sm text-text-subtle">Key Ownership & UTXO Management</p>
+          <h1 className="text-xl font-semibold text-gray-900">Bitcoin Treasury</h1>
+          <p className="text-sm text-gray-500">Key Ownership &amp; UTXO Management</p>
         </div>
       </header>
-
       {/* Summary cards */}
       <section className="grid grid-cols-3 gap-6 mb-8">
-        <div className="bg-background-card p-6 rounded-lg shadow border border-gray-200 flex flex-col justify-between">
-          <p className="text-sm text-text-subtle mb-1">Total Bitcoin</p>
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 flex flex-col justify-between">
+          <p className="text-sm text-gray-500 mb-1">Total Bitcoin</p>
           <div className="flex items-center justify-between">
-            <h2 className="font-extrabold text-2xl text-text-default">{totalBtc}</h2>
+            <h2 className="font-extrabold text-2xl ">{totalBtc}</h2>
           </div>
-          <p className="text-text-subtle mt-1">{totalEur}</p>
+          <p className="text-gray-500 mt-1">{totalEur}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
