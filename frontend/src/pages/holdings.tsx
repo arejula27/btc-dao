@@ -92,9 +92,9 @@ const Dashboard = () => {
   const totalKeys = keyStatuses.length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 font-sans max-w-7xl mx-auto">
+    <div className="min-h-screen  p-8 font-sans max-w-7xl mx-auto">
       {/* Header */}
-      <header className="flex items-center gap-3 border-b border-gray-200 pb-4 mb-8">
+      <header className="flex items-center gap-3  pb-4 mb-8">
         <Link to="/" className="text-text-subtle hover:text-primary transition">
           <svg
             className="w-6 h-6"
