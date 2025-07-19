@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 )
 
 type bitcoinClient struct {
@@ -30,7 +31,7 @@ func (bcli *bitcoinClient) callRPC(method string, params []interface{}) ([]byte,
 
 	reqBody := RPCRequest{
 		Jsonrpc: "1.0",
-		ID:      "btcbalance",
+		ID:      "btcwallet",
 		Method:  method,
 		Params:  params,
 	}
@@ -76,4 +77,28 @@ func (bcli *bitcoinClient) GetBalance(descriptor string) (float64, error) {
 	}
 
 	return balanceInfo["total_amount"].(float64), nil
+}
+
+// GetDescriptorUTXOs retrieves the UTXOs for a given descriptor.
+func (bcli *bitcoinClient) GetDescriptorUTXOs(descriptor string) ([]UTXO, error) {
+	// Call Bitcoin RPC to get UTXOs
+	result, err := bcli.callRPC("scantxoutset", []interface{}{"start", []interface{}{map[string]interface{}{"desc": descriptor}}})
+	if err != nil {
+		return nil, err
+	}
+
+	type UTXOSetInfo struct {
+		Unspents []UTXO `json:"unspents"`
+	}
+	var utxoSetInfo UTXOSetInfo
+	if err := json.Unmarshal(result, &utxoSetInfo); err != nil {
+		return nil, fmt.Errorf("failed to parse UTXO set info: %w", err)
+	}
+
+	// sort the unspents by height, first the most recent (highest height)
+	sort.Slice(utxoSetInfo.Unspents, func(i, j int) bool {
+		return utxoSetInfo.Unspents[i].Height > utxoSetInfo.Unspents[j].Height
+	})
+
+	return utxoSetInfo.Unspents, nil
 }

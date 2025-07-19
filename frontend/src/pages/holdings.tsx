@@ -1,4 +1,7 @@
 import { Link } from 'react-router';
+import { useState, useEffect } from 'react';
+import { fetchUTXOsList } from '../services/holdingsService';
+import type { UTXO } from '../services/holdingsService';
 interface KeyStatus {
   name: string;
   role: string;
@@ -6,16 +9,6 @@ interface KeyStatus {
   daysAgo: number;
 }
 
-interface UTXO {
-  title: string;
-  description: string;
-  btc: string;
-  eur: string;
-  txId: string;
-  output: number;
-  address: string;
-  confirmations: number;
-}
 
 const keyStatuses: KeyStatus[] = [
   { name: 'alice_ceo', role: 'CEO', status: 'verified', daysAgo: 5 },
@@ -25,58 +18,6 @@ const keyStatuses: KeyStatus[] = [
   { name: 'eve_board', role: 'Board Member', status: 'lost', daysAgo: 542 },
 ];
 
-const utxos: UTXO[] = [
-  {
-    title: 'Q1 Settlement',
-    description: 'Quarterly settlement and operational expenses',
-    btc: '₿3.2547',
-    eur: '€137,836.55',
-    txId: 'a1b2c3d4e5f6...u1v2w3x4y5z6',
-    output: 0,
-    address: 'bc1qxy2kgdyg...83kkfjhx0w1h',
-    confirmations: 1247,
-  },
-  {
-    title: 'Vendor Payments',
-    description: 'Outstanding vendor and contractor payments',
-    btc: '₿2.1234',
-    eur: '€89,925.99',
-    txId: 'b2c3d4e5f6g7...v2w3x4y5z6a1',
-    output: 1,
-    address: 'bc1qw508d6qe...c5xw7kv8f3t4',
-    confirmations: 892,
-  },
-  {
-    title: 'Strategic Reserve',
-    description: 'Long-term strategic treasury reserve',
-    btc: '₿4.7856',
-    eur: '€202,670.16',
-    txId: 'c3d4e5f6g7h8...w3x4y5z6a1b2',
-    output: 0,
-    address: 'bc1qrp33q0q5...ysxf3qccfmy3',
-    confirmations: 2156,
-  },
-  {
-    title: 'Operational Buffer',
-    description: 'Buffer for unexpected operational costs',
-    btc: '₿1.8765',
-    eur: '€79,469.78',
-    txId: 'd4e5f6g7h8i9...x4y5z6a1b2c3',
-    output: 2,
-    address: 'bc1qm341sc65...e3ewf0j77s3h',
-    confirmations: 567,
-  },
-  {
-    title: 'Contingency Fund',
-    description: 'Emergency contingency allocation',
-    btc: '₿0.5445',
-    eur: '€23,059.58',
-    txId: 'e5f6g7h8i9j0...y5z6a1b2c3d4',
-    output: 1,
-    address: 'bc1qklwj3mkf...w8f9x0y1z2a3',
-    confirmations: 1834,
-  },
-];
 
 const statusColors = {
   verified: 'bg-green-100 text-green-800',
@@ -85,11 +26,38 @@ const statusColors = {
 };
 
 const Dashboard = () => {
-  const totalBtc = '₿12.5847';
   const totalEur = '€532,962.04';
-  const utxoCount = 5;
   const verifiedCount = keyStatuses.filter(k => k.status === 'verified').length;
   const totalKeys = keyStatuses.length;
+  const [utxos, setUtxos] = useState<UTXO[]>([]);
+  const [totalBtc, setTotalBtc] = useState<string>('0.00000000');
+  const [utxoCount, setUtxoCount] = useState<number>(0);
+
+  useEffect(() => {
+    const loadUTXOs = async () => {
+      try {
+        const utxosData = await fetchUTXOsList();
+        setUtxos(utxosData);
+
+        setUtxoCount(utxosData.length)
+
+        // iterate through the UTXOs to calculate total BTC
+        const totalBtcNumber: number = utxosData
+          .map((utxo: UTXO) => parseFloat(utxo.btc))
+          .reduce((sum, current) => sum + current, 0);
+
+        setTotalBtc(`${totalBtcNumber.toFixed(8)}`);
+
+
+      } catch (error) {
+        console.error('Error fetching UTXOs:', error);
+      }
+    };
+
+    loadUTXOs();
+  }, []);
+
+
 
   return (
     <div className="max-w-7xl mx-auto p-8 font-sans">

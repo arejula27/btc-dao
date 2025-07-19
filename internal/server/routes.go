@@ -31,6 +31,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	btcGroup := e.Group("/btc")
 	// Register the Bitcoin balance handler
 	btcGroup.GET("/getBalance", s.GetBalanceHandler)
+	// Register the Bitcoin UTXO handler
+	btcGroup.GET("/getUTXOs", s.GetUTXOHandler)
 
 	return e
 }
@@ -67,4 +69,19 @@ func (s *Server) GetBalanceHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]float64{
 		"balance": balance,
 	})
+}
+
+func (s *Server) GetUTXOHandler(c echo.Context) error {
+	// Gather from database
+	descriptor := "tr([05ebc07a/86h/1h/0h]tpubDCCqg9reqruTFN8nhdZU7CyCJL17EGKWEjiyUrKWauothvMN4Rr1FFsnLG5ocaQQyD63ZnUfnfCLGWChYhd1QqgLVpo6PBNwejXRcSmyt2Y/<0;1>/*)#6v7wxu2x"
+
+	// Call Bitcoin RPC to get UTXOs
+	utxos, err := s.bcli.GetDescriptorUTXOs(descriptor)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": fmt.Sprintf("failed to get UTXOs: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, utxos)
 }
