@@ -6,6 +6,7 @@ type UTXO struct {
 	Amount       float32 `json:"amount"`
 	Height       int     `json:"height"`
 	Pubkey       string  `json:"scriptPubKey"`
-	Confirations int     // this is not a part of the UTXO, we can get it by subtracting the current block height from the height of the UTXO
-	Title        string  // this is retrieved from the database, it is not a part of the UTXO, it is a titled set by the user
+	Address      string  `json:"address"`       // this is not a part of the UTXO, it is derived from the pubkey
+	Confirations int     `json:"confirmations"` // this is not a part of the UTXO, it is derived from the height of the UTXO and the current block height
+	Title        string  `json:"title`          // this is retrieved from the database, it is not a part of the UTXO, it is a titled set by the user
 }

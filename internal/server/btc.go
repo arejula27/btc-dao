@@ -79,6 +79,27 @@ func (bcli *bitcoinClient) GetBalance(descriptor string) (float64, error) {
 	return balanceInfo["total_amount"].(float64), nil
 }
 
+func (bcli *bitcoinClient) DecodeScript(scriptPubKey string) (string, error) {
+	// Call Bitcoin RPC to decode the script
+	result, err := bcli.callRPC("decodescript", []interface{}{scriptPubKey})
+	if err != nil {
+		return "", err
+	}
+
+	var decodedScript map[string]interface{}
+	if err := json.Unmarshal(result, &decodedScript); err != nil {
+		return "", fmt.Errorf("failed to parse decoded script: %w", err)
+	}
+
+	// Extract the address from the decoded script
+	address, ok := decodedScript["address"].(string)
+	if !ok {
+		return "", fmt.Errorf("address not found in decoded script")
+	}
+
+	return address, nil
+}
+
 // GetDescriptorUTXOs retrieves the UTXOs for a given descriptor.
 func (bcli *bitcoinClient) GetDescriptorUTXOs(descriptor string) ([]UTXO, error) {
 	// Call Bitcoin RPC to get UTXOs
@@ -89,16 +110,32 @@ func (bcli *bitcoinClient) GetDescriptorUTXOs(descriptor string) ([]UTXO, error)
 
 	type UTXOSetInfo struct {
 		Unspents []UTXO `json:"unspents"`
+		Height   int    `json:"height"`
 	}
 	var utxoSetInfo UTXOSetInfo
 	if err := json.Unmarshal(result, &utxoSetInfo); err != nil {
 		return nil, fmt.Errorf("failed to parse UTXO set info: %w", err)
 	}
 
+	utxoList := utxoSetInfo.Unspents
+
 	// sort the unspents by height, first the most recent (highest height)
-	sort.Slice(utxoSetInfo.Unspents, func(i, j int) bool {
-		return utxoSetInfo.Unspents[i].Height > utxoSetInfo.Unspents[j].Height
+	sort.Slice(utxoList, func(i, j int) bool {
+		return utxoList[i].Height > utxoList[j].Height
 	})
 
-	return utxoSetInfo.Unspents, nil
+	// Add address and confirmations to each
+
+	for i := range utxoList {
+		address, err := bcli.DecodeScript(utxoList[i].Pubkey)
+		if err != nil {
+			return nil, fmt.Errorf("failed to decode script for UTXO %s: %w", utxoList[i].TxID, err)
+		}
+		utxoList[i].Address = address
+		utxoList[i].Confirations = utxoSetInfo.Height - utxoList[i].Height + 1
+	}
+
+	//TODO: retrieve titles from the database and add them to the UTXO
+
+	return utxoList, nil
 }
