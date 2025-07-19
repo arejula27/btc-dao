@@ -79,6 +79,8 @@ func (bcli *bitcoinClient) GetBalance(descriptor string) (float64, error) {
 	return balanceInfo["total_amount"].(float64), nil
 }
 
+// TODO: check if it is more efficient to decode write the logic to decode the script here instead of using the Bitcoin RPC
+// DecodeScript decodes a Bitcoin scriptPubKey and returns the associated address.
 func (bcli *bitcoinClient) DecodeScript(scriptPubKey string) (string, error) {
 	// Call Bitcoin RPC to decode the script
 	result, err := bcli.callRPC("decodescript", []interface{}{scriptPubKey})
